@@ -16,7 +16,8 @@ redDot, = plt.plot([0], [np.sin(0)], 'ro')
 
 
 def animate(i):
-    redDot.set_data(i, np.sin(i))
+    # Matplotlib 3.7+ requires sequence data; a bare scalar raises RuntimeError.
+    redDot.set_data([i], [np.sin(i)])
     return redDot,
 
 
@@ -24,4 +25,10 @@ def animate(i):
 myAnimation = animation.FuncAnimation(fig, animate, frames=np.arange(0.0, TWOPI, 0.1),
                                       interval=10, blit=True, repeat=True)
 
-plt.show()
+
+def main():
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()
