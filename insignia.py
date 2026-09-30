@@ -32,5 +32,11 @@ def update(frame):
 ani = FuncAnimation(fig, update, frames=np.linspace(0, 2*np.pi, 10),
                     init_func=init, blit=True)
 
-plt.show()
+
+def main():
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()
 

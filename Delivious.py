@@ -6,6 +6,12 @@ import PIL.Image
 import cv2 as cv
 from tkinter import ttk
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def asset_path(*parts):
+    return os.path.join(BASE_DIR, *parts)
+
 # dataframe index τις φυλες και καθε στηλη θα είναι η ιδιότητα του μάλλον θελει 2 και να παιζω με 0 1
 
 
@@ -69,6 +75,26 @@ classes_db.loc['Slen', 'race'] = 'Hyirus'
 classes_db.loc['Slen', 'class_one'] = 'Priest'  # ok
 classes_db.loc['Slen', 'class_two'] = 'Nature Manipulator'
 classes_db.loc['Slen', 'class_three'] = 'Dark Artist'
+
+# Portrait file plus tribe lore for each class the character sheet illustrates.
+CLASS_ASSETS = {
+    'Berserker': (asset_path('Photos', 'Goblin', 'goblin_berserker.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Mage': (asset_path('Photos', 'Goblin', 'goblin_mage.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Shaman': (asset_path('Photos', 'Goblin', 'goblin_shaman.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Thief': (asset_path('Photos', 'Goblin', 'goblin_thief.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Warlock': (asset_path('Photos', 'Goblin', 'goblin_warlock.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Warrior': (asset_path('Photos', 'Goblin', 'goblin_warrior.jpg'), asset_path('Tribe Lores', 'Goblin.txt')),
+    'Gunsmith': (asset_path('Photos', 'Human', 'human_gunsmith.jpg'), asset_path('Tribe Lores', 'Human.txt')),
+    'Sharp Shooter': (asset_path('Photos', 'Human', 'human_sharp.jpg'), asset_path('Tribe Lores', 'Human.txt')),
+    'Noble': (asset_path('Photos', 'Hyirus', 'hyirus_noble.jpg'), asset_path('Tribe Lores', 'Hyirus.txt')),
+    'Priest': (asset_path('Photos', 'Hyirus', 'hyirus_priest.jpg'), asset_path('Tribe Lores', 'Hyirus.txt')),
+    'Blood Caster': (asset_path('Photos', 'Raisen', 'raisen_blood.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+    'Bone Crusher': (asset_path('Photos', 'Raisen', 'raisen_bone.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+    'Fallen Knight': (asset_path('Photos', 'Raisen', 'raisen_fallen.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+    'Necromancer': (asset_path('Photos', 'Raisen', 'raisen_necro.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+    'Reanimator': (asset_path('Photos', 'Raisen', 'raisen_reanim.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+    'Shadow Shifter': (asset_path('Photos', 'Raisen', 'raisen_shadow.jpg'), asset_path('Tribe Lores', 'Raisen.txt')),
+}
 
 
 def praise_abort():
@@ -174,47 +200,9 @@ class CharSheet(ttk.Frame):
                 classes.append(line)
             del classes[0]
             prof_opt.config(values=list(classes))
-            # Goblin
-            if prof_opt.get() == 'Berserker':
-                _img_selector('Photos\\Goblin\\goblin_berserker.jpg',
-                              'Tribe Lores\\Goblin.txt')
-            elif prof_opt.get() == 'Mage':
-                _img_selector('Photos\\Goblin\\goblin_mage.jpg',
-                              'Tribe Lores\\Goblin.txt')
-            elif prof_opt.get() == 'Shaman':
-                _img_selector('Photos\\Goblin\\goblin_shaman.jpg', 'Tribe Lores\\Goblin.txt')
-            elif prof_opt.get() == 'Thief':
-                _img_selector('Photos\\Goblin\\goblin_thief.jpg', 'Tribe Lores\\Goblin.txt')
-            elif prof_opt.get() == 'Warlock':
-                _img_selector('Photos\\Goblin\\goblin_warlock.jpg', 'Tribe Lores\\Goblin.txt')
-            elif prof_opt.get() == 'Warrior':
-                _img_selector('Photos\\Goblin\\goblin_warrior.jpg', 'Tribe Lores\\Goblin.txt')
-
-            # Human
-            elif prof_opt.get() == 'Gunsmith':
-                _img_selector('Photos\\Human\\human_gunsmith.jpg', 'Tribe Lores\\Human.txt')
-            elif prof_opt.get() == 'Sharp Shooter':
-                _img_selector('Photos\\Human\\human_sharp.jpg', 'Tribe Lores\\Human.txt')
-
-            # Hyirus
-            elif prof_opt.get() == 'Noble':
-                _img_selector('Photos\\Hyirus\\hyirus_noble.jpg', 'Tribe Lores\\Hyirus.txt')
-            elif prof_opt.get() == 'Priest':
-                _img_selector('Photos\\Hyirus\\hyirus_priest.jpg', 'Tribe Lores\\Hyirus.txt')
-
-            # Raisen
-            elif prof_opt.get() == 'Blood Caster':
-                _img_selector('Photos\\Raisen\\raisen_blood.jpg', 'Tribe Lores\\Raisen.txt')
-            elif prof_opt.get() == 'Bone Crusher':
-                _img_selector('Photos\\Raisen\\raisen_bone.jpg', 'Tribe Lores\\Raisen.txt')
-            elif prof_opt.get() == 'Fallen Knight':
-                _img_selector('Photos\\Raisen\\raisen_fallen.jpg', 'Tribe Lores\\Raisen.txt')
-            elif prof_opt.get() == 'Necromancer':
-                _img_selector('Photos\\Raisen\\raisen_necro.jpg', 'Tribe Lores\\Raisen.txt')
-            elif prof_opt.get() == 'Reanimator':
-                _img_selector('Photos\\Raisen\\raisen_reanim.jpg', 'Tribe Lores\\Raisen.txt')
-            elif prof_opt.get() == 'Shadow Shifter':
-                _img_selector('Photos\\Raisen\\raisen_shadow.jpg', 'Tribe Lores\\Raisen.txt')
+            selected = CLASS_ASSETS.get(prof_opt.get())
+            if selected is not None:
+                _img_selector(*selected)
 
         wms = ttk.Label(self, text='What are you?', font=Titles)
         race_window = ttk.Frame(self)
@@ -263,6 +251,7 @@ class CharSheet(ttk.Frame):
         canvas.pack()
 
 
-app = Main()
-app.geometry('800x600')
-app.mainloop()
+if __name__ == '__main__':
+    app = Main()
+    app.geometry('800x600')
+    app.mainloop()
